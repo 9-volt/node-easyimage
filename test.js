@@ -121,8 +121,7 @@ describe('.crop -', function () {
         return easyimg.crop({
             src:srcimg, dst:'./output/crop.jpg',
             cropwidth:128, cropheight:128,
-            gravity:'North',
-            x:0, y:0
+            x:400, y:0
         }).then(function (file) {
             file.should.be.a('object');
             file.should.have.property('width');

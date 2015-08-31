@@ -146,14 +146,21 @@ exports.crop = function(options) {
 	if (options.cropwidth === undefined) return deferred.reject(error_messages['dim']);
 
 	options.cropheight = options.cropheight || options.cropwidth;
-	options.gravity = options.gravity || 'Center';
 	options.x = options.x || 0;
 	options.y = options.y || 0;
 	// options.src = quoted_name(options.src);
 	// options.dst = quoted_name(options.dst);
 
-	if (options.quality === undefined) args = [options.src, '-gravity', options.gravity, '-crop', options.cropwidth + 'x'+ options.cropheight + '+' + options.x + '+' + options.y, options.dst];
-	else args = [options.src, '-gravity', options.gravity, '-crop', options.cropwidth + 'x'+ options.cropheight + '+' + options.x + '+' + options.y, '-quality', options.quality, options.dst];
+	args = [options.src, '-crop', options.cropwidth + 'x' + options.cropheight + '+' + options.x + '+' + options.y, options.dst];
+	if (options.quality !== undefined) {
+		args.splice(1, 0, '-quality');
+		args.splice(2, 0, options.quality);
+	}
+
+	if (options.gravity !== undefined) {
+		args.splice(1, 0, '-gravity');
+		args.splice(2, 0, options.gravity)
+	}
 
 	child = exec('convert', args, function(err, stdout, stderr) {
 		if (err) deferred.reject(err);
