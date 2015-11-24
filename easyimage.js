@@ -255,8 +255,17 @@ exports.exec = function(command) {
 	var deferred = Q.defer();
 
 	process.nextTick(function () {
+		// Check if command is String or Array
+		if (Object.prototype.toString.call(command).toLowerCase() === '[object array]') {
+			args = command.slice(0); // Make a copy
+		} else {
+			args = command.split(' ');
+		}
 
-		args = command.split(' ').slice(1);
+		// Slice args only if first element is command
+		if (args.length && args[0] === 'convert') {
+			args = args.slice(1);
+		}
 
 		child = exec('convert', args, function(err, stdout, stderr) {
 			if (err) return deferred.reject(err);
